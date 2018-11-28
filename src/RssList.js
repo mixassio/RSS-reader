@@ -51,6 +51,15 @@ export default class RssList {
   }
 
   render(state) {
+    console.log(state);
+    const input = document.getElementById('inlineFormInput');
+    const submit = document.querySelector('.submit');
+    submit.disabled = state.registrationProcess.submitDisabled;
+    if (state.registrationProcess.valid) {
+      input.style.border = null;
+    } else {
+      input.style.border = 'thick solid red';
+    }
     const { chanels } = state;
     chanels.forEach((chanel) => {
       this.addChanel(chanel);

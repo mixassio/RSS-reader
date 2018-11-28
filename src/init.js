@@ -1,5 +1,7 @@
+import axios from 'axios';
 import RssList from './RssList';
 import exampleState from './stateExample';
+
 
 const state = {
   chanels: [],
@@ -10,9 +12,17 @@ const state = {
 };
 
 
+const proxy = 'https://cors-anywhere.herokuapp.com/';
+const link = 'http://news.yandex.ru/religion.rss';
+
 export default () => {
+  axios.get(`${proxy}${link}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+    .then((data) => {
+      console.log(data);
+    });
   const element = document.getElementById('accordionExample');
   const obj = new RssList(element);
+  console.log('egegey', new Date());
   obj.init();
   obj.render(exampleState);
 
@@ -22,19 +32,23 @@ export default () => {
   console.log(linksRss);
   input.addEventListener('keyup', () => {
     if (input.value === '') {
-      state.registrationProcess.valid = true;
-      state.registrationProcess.submitDisabled = true;
+      exampleState.registrationProcess.valid = true;
+      exampleState.registrationProcess.submitDisabled = true;
     } else if (linksRss.has(input.value)) {
-      state.registrationProcess.valid = false;
-      state.registrationProcess.submitDisabled = true;
+      exampleState.registrationProcess.valid = false;
+      exampleState.registrationProcess.submitDisabled = true;
     } else {
-      state.registrationProcess.valid = true;
-      state.registrationProcess.submitDisabled = false;
+      exampleState.registrationProcess.valid = true;
+      exampleState.registrationProcess.submitDisabled = false;
     }
     obj.render(exampleState);
   });
-  submit.addEventListener('click', () => {
-    console.log(input.value);
-    obj.render(exampleState);
+  submit.addEventListener('submit', () => {
+    axios.get(`${proxy}${link}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+      .then((data) => {
+        console.log(data);
+        exampleState.temp = data;
+      })
+      .then(() => obj.render(exampleState));
   });
 };

@@ -2,6 +2,7 @@
 export default class RssList {
   constructor(element) {
     this.element = element;
+    console.log('constructor', new Date());
   }
 
   init() {
@@ -52,6 +53,7 @@ export default class RssList {
 
   render(state) {
     console.log(state);
+    this.element.textContent = state.temp;
     const input = document.getElementById('inlineFormInput');
     const submit = document.querySelector('.submit');
     submit.disabled = state.registrationProcess.submitDisabled;

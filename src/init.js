@@ -28,8 +28,9 @@ export default () => {
 
   const input = document.getElementById('inlineFormInput');
   const submit = document.querySelector('.submit');
+  const form = document.querySelector('form');
+  form.addEventListener('submit', e => e.preventDefault());
   const linksRss = new Set(exampleState.chanels.map(el => el.link));
-  console.log(linksRss);
   input.addEventListener('keyup', () => {
     if (input.value === '') {
       exampleState.registrationProcess.valid = true;
@@ -43,7 +44,7 @@ export default () => {
     }
     obj.render(exampleState);
   });
-  submit.addEventListener('submit', () => {
+  submit.addEventListener('click', () => {
     axios.get(`${proxy}${link}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then((data) => {
         console.log(data);

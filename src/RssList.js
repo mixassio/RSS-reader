@@ -10,7 +10,7 @@ export default class RssList {
   }
 
   addChanel({
-    id, title, link, news,
+    id, title, news,
   }) {
     const cardEl = document.createElement('div');
     cardEl.classList.add('card');
@@ -61,6 +61,7 @@ export default class RssList {
     } else {
       input.style.border = 'thick solid red';
     }
+    this.element.innerHTML = '';
     const { chanels } = state;
     chanels.forEach((chanel) => {
       this.addChanel(chanel);

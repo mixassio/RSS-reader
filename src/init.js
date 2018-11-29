@@ -1,6 +1,6 @@
 import axios from 'axios';
+import isURL from 'validator/lib/isURL';
 import RssList from './RssList';
-import exampleState from './stateExample';
 
 
 const state = {
@@ -13,43 +13,60 @@ const state = {
 
 
 const proxy = 'https://cors-anywhere.herokuapp.com/';
-const link = 'http://news.yandex.ru/religion.rss';
-
+// const link = 'http://news.yandex.ru/religion.rss';
+console.log(isURL('http://news.yandex.ru/religion.rss'), isURL('dsfda'));
 export default () => {
-  axios.get(`${proxy}${link}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-    .then((data) => {
-      console.log(data);
-    });
   const element = document.getElementById('accordionExample');
   const obj = new RssList(element);
   console.log('egegey', new Date());
   obj.init();
-  obj.render(exampleState);
+  obj.render(state);
 
   const input = document.getElementById('inlineFormInput');
   const submit = document.querySelector('.submit');
   const form = document.querySelector('form');
   form.addEventListener('submit', e => e.preventDefault());
-  const linksRss = new Set(exampleState.chanels.map(el => el.link));
+  const linksRss = new Set(state.chanels.map(el => el.link));
   input.addEventListener('keyup', () => {
     if (input.value === '') {
-      exampleState.registrationProcess.valid = true;
-      exampleState.registrationProcess.submitDisabled = true;
+      state.registrationProcess.valid = true;
+      state.registrationProcess.submitDisabled = true;
     } else if (linksRss.has(input.value)) {
-      exampleState.registrationProcess.valid = false;
-      exampleState.registrationProcess.submitDisabled = true;
+      state.registrationProcess.valid = false;
+      state.registrationProcess.submitDisabled = true;
+    } else if (!isURL(input.value)) {
+      state.registrationProcess.valid = false;
+      state.registrationProcess.submitDisabled = true;
     } else {
-      exampleState.registrationProcess.valid = true;
-      exampleState.registrationProcess.submitDisabled = false;
+      state.registrationProcess.valid = true;
+      state.registrationProcess.submitDisabled = false;
     }
-    obj.render(exampleState);
+    obj.render(state);
   });
   submit.addEventListener('click', () => {
-    axios.get(`${proxy}${link}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-      .then((data) => {
-        console.log(data);
-        exampleState.temp = data;
+    axios.get(`${proxy}${input.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+      .then(({ data }) => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(data, 'application/xml');
+        const items = doc.querySelectorAll('item');
+        const channel = doc.querySelector('channel');
+        const titleChanell = channel.querySelector('title').textContent;
+        const newChanell = {
+          id: titleChanell.length, // заглушка
+          title: titleChanell,
+          news: [],
+        };
+        [...items].forEach((item, id) => {
+          const article = {
+            id,
+            title: item.querySelector('title').textContent,
+            desription: item.querySelector('description').textContent,
+            link: item.querySelector('link').textContent,
+          };
+          newChanell.news.push({ ...article });
+        });
+        state.chanels.push({ ...newChanell });
       })
-      .then(() => obj.render(exampleState));
+      .then(() => obj.render(state));
   });
 };

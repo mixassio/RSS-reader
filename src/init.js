@@ -4,6 +4,7 @@ import RssList from './RssList';
 
 const counter = () => {
   let id = 0;
+  // eslint-disable-next-line no-plusplus
   return () => id++;
 };
 const proxy = 'https://cors-anywhere.herokuapp.com/';
@@ -17,6 +18,7 @@ export default () => {
       submitDisabled: true,
     },
     getIdChanell: counter(),
+    linksRss: new Set(),
   };
   const element = document.getElementById('accordionExample');
   const obj = new RssList(element);
@@ -28,12 +30,11 @@ export default () => {
   const submit = document.querySelector('.submit');
   const form = document.querySelector('form');
   form.addEventListener('submit', e => e.preventDefault());
-  const linksRss = new Set(state.chanels.map(el => el.link));
   input.addEventListener('keyup', () => {
     if (input.value === '') {
       state.registrationProcess.valid = true;
       state.registrationProcess.submitDisabled = true;
-    } else if (linksRss.has(input.value)) {
+    } else if (state.linksRss.has(input.value)) {
       state.registrationProcess.valid = false;
       state.registrationProcess.submitDisabled = true;
     } else if (!isURL(input.value)) {
@@ -57,6 +58,7 @@ export default () => {
           id: state.getIdChanell(),
           title: titleChanell,
           news: [],
+          link: input.value,
         };
         [...items].forEach((item, id) => {
           const article = {
@@ -67,6 +69,7 @@ export default () => {
           };
           newChanell.news.push({ ...article });
         });
+        state.linksRss.add(input.value);
         state.chanels.push({ ...newChanell });
       })
       .then(() => obj.render(state));

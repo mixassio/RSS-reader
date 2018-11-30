@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import isURL from 'validator/lib/isURL';
 import WatchJS from 'melanke-watchjs';
 import RssList from './RssList';
@@ -13,6 +14,7 @@ export default () => {
       submitDisabled: true,
     },
     linksRss: new Set(),
+    success: _.uniqueId(),
   };
 
   const element = document.getElementById('accordionExample');
@@ -48,9 +50,12 @@ export default () => {
       .then((newChanell) => {
         state.linksRss.add(input.value);
         state.chanels.push({ ...newChanell });
-      });
+      })
+      .catch(() => { state.success = _.uniqueId(); });
   });
 
   const { watch } = WatchJS;
-  watch(state, () => obj.render(state));
+  watch(state, 'registrationProcess', () => obj.renderTop(state));
+  watch(state, 'chanels', () => obj.render(state));
+  watch(state, 'success', () => obj.renderSuccess());
 };

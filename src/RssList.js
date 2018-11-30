@@ -50,7 +50,7 @@ export default class RssList {
     this.element.appendChild(cardEl);
   }
 
-  render(state) {
+  renderTop(state) {
     console.log(state);
     const input = document.getElementById('inlineFormInput');
     const submit = document.querySelector('.submit');
@@ -62,11 +62,25 @@ export default class RssList {
       input.classList.remove('is-valid');
       input.classList.add('is-invalid');
     }
+    return this.element;
+  }
+
+  renderSuccess() {
+    const allertEl = document.createElement('div');
+    allertEl.textContent = 'something was wrong';
+    allertEl.classList.add('alert', 'alert-danger');
+    allertEl.setAttribute('role', 'alert');
+    this.element.appendChild(allertEl);
+  }
+
+  render(state) {
     this.element.innerHTML = '';
     const { chanels } = state;
     chanels.forEach((chanel) => {
       this.addChanel(chanel);
     });
+    const form = document.querySelector('form');
+    form.reset();
     return this.element;
   }
 }

@@ -3,19 +3,17 @@ import isURL from 'validator/lib/isURL';
 import RssList from './RssList';
 
 
-const state = {
-  chanels: [],
-  registrationProcess: {
-    valid: true,
-    submitDisabled: true,
-  },
-};
-
-
 const proxy = 'https://cors-anywhere.herokuapp.com/';
-// const link = 'http://news.yandex.ru/religion.rss';
+// surgeconst link = 'http://news.yandex.ru/religion.rss';
 console.log(isURL('http://news.yandex.ru/religion.rss'), isURL('dsfda'));
 export default () => {
+  const state = {
+    chanels: [],
+    registrationProcess: {
+      valid: true,
+      submitDisabled: true,
+    },
+  };
   const element = document.getElementById('accordionExample');
   const obj = new RssList(element);
   console.log('egegey', new Date());

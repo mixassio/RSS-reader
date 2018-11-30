@@ -2,7 +2,6 @@
 export default class RssList {
   constructor(element) {
     this.element = element;
-    console.log('constructor', new Date());
   }
 
   init() {
@@ -57,9 +56,11 @@ export default class RssList {
     const submit = document.querySelector('.submit');
     submit.disabled = state.registrationProcess.submitDisabled;
     if (state.registrationProcess.valid) {
-      input.style.border = null;
+      input.classList.remove('is-invalid');
+      input.classList.add('is-valid');
     } else {
-      input.style.border = 'thick solid red';
+      input.classList.remove('is-valid');
+      input.classList.add('is-invalid');
     }
     this.element.innerHTML = '';
     const { chanels } = state;

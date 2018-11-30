@@ -2,7 +2,10 @@ import axios from 'axios';
 import isURL from 'validator/lib/isURL';
 import RssList from './RssList';
 
-
+const counter = () => {
+  let id = 0;
+  return () => id++;
+};
 const proxy = 'https://cors-anywhere.herokuapp.com/';
 // surgeconst link = 'http://news.yandex.ru/religion.rss';
 console.log(isURL('http://news.yandex.ru/religion.rss'), isURL('dsfda'));
@@ -13,6 +16,7 @@ export default () => {
       valid: true,
       submitDisabled: true,
     },
+    getIdChanell: counter(),
   };
   const element = document.getElementById('accordionExample');
   const obj = new RssList(element);
@@ -50,7 +54,7 @@ export default () => {
         const channel = doc.querySelector('channel');
         const titleChanell = channel.querySelector('title').textContent;
         const newChanell = {
-          id: titleChanell.length, // заглушка
+          id: state.getIdChanell(),
           title: titleChanell,
           news: [],
         };

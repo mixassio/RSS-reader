@@ -50,6 +50,7 @@ export default () => {
       .then((newChanell) => {
         state.linksRss.add(input.value);
         state.chanels.push({ ...newChanell });
+        state.registrationProcess.submitDisabled = true;
       })
       .catch(() => { state.success = _.uniqueId(); });
   });

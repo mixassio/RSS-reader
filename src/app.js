@@ -3,8 +3,10 @@ import _ from 'lodash';
 import $ from 'jquery';
 import isURL from 'validator/lib/isURL';
 import WatchJS from 'melanke-watchjs';
-import RssList from './RssList';
 import { getNewChannel, proxy } from './lib';
+import {
+  renderChanels, renderModal, renderSuccess, renderTop,
+} from './render';
 
 
 export default () => {
@@ -17,12 +19,6 @@ export default () => {
     linksRss: new Set(),
     success: _.uniqueId(),
   };
-
-  const element = document.getElementById('accordionExample');
-  const obj = new RssList(element);
-  obj.init();
-  obj.render(state);
-
   const input = document.getElementById('inlineFormInput');
   input.addEventListener('keyup', () => {
     if (input.value === '') {
@@ -63,8 +59,8 @@ export default () => {
 
   console.log('jquery', $('.list-group-item').find('description-news'));
   const { watch } = WatchJS;
-  watch(state, 'registrationProcess', () => obj.renderTop(state));
-  watch(state, 'chanels', () => obj.render(state));
-  watch(state, 'success', () => obj.renderSuccess());
-  watch(state, 'modal', () => obj.renderModal());
+  watch(state, 'registrationProcess', () => renderTop(state));
+  watch(state, 'chanels', () => renderChanels(state));
+  watch(state, 'success', () => renderSuccess());
+  watch(state, 'modal', () => renderModal());
 };

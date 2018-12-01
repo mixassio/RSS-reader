@@ -1,9 +1,10 @@
 import axios from 'axios';
 import _ from 'lodash';
+import $ from 'jquery';
 import isURL from 'validator/lib/isURL';
 import WatchJS from 'melanke-watchjs';
 import RssList from './RssList';
-import { getNewChanell, proxy } from './lib';
+import { getNewChannel, proxy } from './lib';
 
 
 export default () => {
@@ -43,7 +44,7 @@ export default () => {
   submit.addEventListener('click', (e) => {
     e.preventDefault();
     axios.get(`${proxy}${input.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-      .then(({ data }) => getNewChanell(data))
+      .then(({ data }) => getNewChannel(data))
       .then((newChanell) => {
         state.linksRss.add(input.value);
         state.chanels.push({ ...newChanell });
@@ -55,8 +56,15 @@ export default () => {
       });
   });
 
+  $('.description-news').on('click', 'button.btn-primary', (e) => {
+    console.log(e, e.target);
+    state.modal = _.uniqueId();
+  });
+
+  console.log('jquery', $('.list-group-item').find('description-news'));
   const { watch } = WatchJS;
   watch(state, 'registrationProcess', () => obj.renderTop(state));
   watch(state, 'chanels', () => obj.render(state));
   watch(state, 'success', () => obj.renderSuccess());
+  watch(state, 'modal', () => obj.renderModal());
 };

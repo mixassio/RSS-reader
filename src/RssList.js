@@ -70,6 +70,8 @@ export default class RssList {
     allertEl.textContent = 'something was wrong';
     allertEl.classList.add('alert', 'alert-danger');
     allertEl.setAttribute('role', 'alert');
+    const form = document.querySelector('form');
+    form.reset();
     this.element.appendChild(allertEl);
   }
 

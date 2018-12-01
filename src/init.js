@@ -23,11 +23,6 @@ export default () => {
   obj.render(state);
 
   const input = document.getElementById('inlineFormInput');
-  const submit = document.querySelector('.submit');
-  const form = document.querySelector('form');
-
-  form.addEventListener('submit', e => e.preventDefault());
-
   input.addEventListener('keyup', () => {
     if (input.value === '') {
       state.registrationProcess.valid = true;
@@ -44,7 +39,9 @@ export default () => {
     }
   });
 
-  submit.addEventListener('click', () => {
+  const submit = document.querySelector('.submit');
+  submit.addEventListener('click', (e) => {
+    e.preventDefault();
     axios.get(`${proxy}${input.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then(({ data }) => getNewChanell(data))
       .then((newChanell) => {
@@ -52,7 +49,10 @@ export default () => {
         state.chanels.push({ ...newChanell });
         state.registrationProcess.submitDisabled = true;
       })
-      .catch(() => { state.success = _.uniqueId(); });
+      .catch(() => {
+        state.registrationProcess.submitDisabled = true;
+        state.success = _.uniqueId();
+      });
   });
 
   const { watch } = WatchJS;

@@ -6,8 +6,22 @@ import WatchJS from 'melanke-watchjs';
 import { getNewChannel, proxy } from './lib';
 import {
   renderChanels, renderModal, renderSuccess, renderTop,
-} from './render';
+} from './renderers';
 
+const showModalHandler = (e) => {
+  const button = $(e.relatedTarget);
+  const title = button.data('title');
+  const description = button.data('description');
+  const link = button.data('link');
+  const modalLabel = $('#modalLabel');
+  modalLabel.text(title);
+  const pDescr = $('#pDescr');
+  pDescr.text(description);
+  const modalLink = $('#modalLink');
+  modalLink.attr('href', link);
+};
+
+const hideModalHandler = () => $('li > button').css('box-shadow', 'none');
 
 export default () => {
   const state = {
@@ -36,14 +50,14 @@ export default () => {
     }
   });
 
-  const submit = document.querySelector('.submit');
-  submit.addEventListener('click', (e) => {
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     axios.get(`${proxy}${input.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
       .then(({ data }) => getNewChannel(data))
-      .then((newChanell) => {
+      .then((newChannel) => {
         state.linksRss.add(input.value);
-        state.chanels.push({ ...newChanell });
+        state.chanels.push({ ...newChannel });
         state.registrationProcess.submitDisabled = true;
       })
       .catch(() => {
@@ -52,12 +66,10 @@ export default () => {
       });
   });
 
-  $('.description-news').on('click', 'button.btn-primary', (e) => {
-    console.log(e, e.target);
-    state.modal = _.uniqueId();
-  });
+  $('#modalDescription')
+    .on('show.bs.modal', showModalHandler)
+    .on('hide.bs.modal', hideModalHandler);
 
-  console.log('jquery', $('.list-group-item').find('description-news'));
   const { watch } = WatchJS;
   watch(state, 'registrationProcess', () => renderTop(state));
   watch(state, 'chanels', () => renderChanels(state));

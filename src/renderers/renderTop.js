@@ -1,6 +1,5 @@
 
 export default (state) => {
-  console.log(state);
   const input = document.getElementById('inlineFormInput');
   const submit = document.querySelector('.submit');
   submit.disabled = state.registrationProcess.submitDisabled;

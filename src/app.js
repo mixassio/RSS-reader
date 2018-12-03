@@ -95,7 +95,7 @@ export default () => {
 
   const refresh = () => {
     const promises = state.chanels.map(el => el.link).map((address) => {
-      // console.log('1', address);
+      console.log('1', address);
       return axios.get(`${proxy}${address}`).then(({ data }) => getNewChannel(data, address));
     });
     Promise.all(promises).then((responses) => {

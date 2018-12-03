@@ -63,7 +63,7 @@ const addChannel = ({
 };
 
 export default (state) => {
-  console.log(state);
+  // console.log(state);
   const element = document.getElementById('accordionExample');
   element.innerHTML = '';
   const { chanels } = state;

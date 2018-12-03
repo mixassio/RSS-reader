@@ -94,22 +94,21 @@ export default () => {
     .on('hide.bs.modal', hideModalHandler);
 
   const refresh = () => {
-    console.log(state.chanels);
     const promises = state.chanels.map(el => el.link).map((address) => {
-      console.log('1', address);
+      // console.log('1', address);
       return axios.get(`${proxy}${address}`).then(({ data }) => getNewChannel(data, address));
     });
     Promise.all(promises).then((responses) => {
-      console.log('2', responses);
+      // console.log('2', responses);
       responses.forEach((updChannel) => {
-        console.log('3', state.chanels);
+        // console.log('3', state.chanels);
         const [oldChannel] = state.chanels.filter(el => el.link === updChannel.link);
-        console.log(oldChannel);
+        // console.log(oldChannel);
         const oldNews = new Set(oldChannel.news.map(el => el.link));
-        console.log('3,5', oldNews);
+        // console.log('3,5', oldNews);
         const addNews = updChannel.news.reduce((acc, channel) => {
           if (!oldNews.has(channel.link)) {
-            return [...acc, { channel }];
+            return [...acc, { ...channel }];
           }
           return acc;
         }, []);

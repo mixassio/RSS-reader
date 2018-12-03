@@ -39,7 +39,7 @@ const addNews = ({
 }) => `
   <li class="list-group-item">
     ${title}
-    <button class="btn btn-primary modal-btn" type="button" data-toggle="modal" data-target="#modalDescription" data-id="#modalDescription${id} data-title="${title}" data-description="${desription}" data-link="${link}">...</button>
+    <button class="btn btn-primary modal-btn" type="button" data-toggle="modal" data-target="#modalDescription" data-id="#modalDescription${id}" data-title="${title}" data-description="${desription}" data-link="${link}">...</button>
   </li>
 `;
 

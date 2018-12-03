@@ -94,6 +94,7 @@ export default () => {
     .on('hide.bs.modal', hideModalHandler);
 
   const refresh = () => {
+    console.log(state.chanels);
     const promises = state.chanels.map(el => el.link).map((address) => {
       console.log('1', address);
       return axios.get(`${proxy}${address}`).then(({ data }) => getNewChannel(data, address));

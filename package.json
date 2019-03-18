@@ -16,10 +16,6 @@
   },
   "author": "Mixassio",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/mixassio/project-lvl3-s354/issues"
-  },
-  "homepage": "https://github.com/mixassio/project-lvl3-s354#readme",
   "dependencies": {
     "@babel/cli": "^7.1.5",
     "@babel/core": "^7.1.6",
